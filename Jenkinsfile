@@ -34,7 +34,7 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 // This pulls the GLOBAL SSH key by its ID
-                sshagent(['k8s-ssh-key']) {
+                sshagent(['k8s-ssh-key-id']) {
                     sh """
                         ssh -o StrictHostKeyChecking=no ${K8S_VM_USER}@${K8S_VM_IP} \
                         "kubectl apply -f /path/to/your/k8s/configs"
