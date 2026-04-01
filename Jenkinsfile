@@ -9,10 +9,10 @@ pipeline {
 
     stages { // <--- Added this mandatory block
         stage('Checkout') {
-            steps {
-                git 'https://github.com/nikeshnikesh5/devops-demo1.git'
-            }
-        }
+    steps {
+        git branch: 'main', url: 'https://github.com/nikeshnikesh5/devops-demo1.git'
+    }
+}
 
         stage('Build Docker Image') {
             steps {
