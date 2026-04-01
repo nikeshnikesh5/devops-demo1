@@ -41,6 +41,22 @@ pipeline {
                     """
                 }
             }
+       stage('Deploy to Kubernetes') {
+    steps {
+        sshagent(['k8s-ssh-key']) {
+            sh """
+                # 1. Create a directory on the remote VM just in case
+                ssh -o StrictHostKeyChecking=no ${K8S_VM_USER}@${K8S_VM_IP} "mkdir -p /root/k8s-deploy"
+
+                # 2. Copy the YAML files from Jenkins workspace to the VM
+                # (Assuming your YAMLs are in a folder named 'k8s' in your repo)
+                scp -o StrictHostKeyChecking=no k8s/*.yaml ${K8S_VM_USER}@${K8S_VM_IP}:/root/k8s-deploy/
+
+                # 3. Apply the configuration
+                ssh -o StrictHostKeyChecking=no ${K8S_VM_USER}@${K8S_VM_IP} "kubectl apply -f /root/k8s-deploy/"
+            """
         }
+    }
+}
     }
 }
